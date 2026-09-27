@@ -1,0 +1,34 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="theme-color" content="#111111">
+  <meta name="description" content="Quick UPI savings helper">
+  <link rel="manifest" href="manifest.json">
+  <link rel="stylesheet" href="style.css">
+  <title>My Savings</title>
+</head>
+<body>
+  <main class="app">
+    <section class="card">
+      <div class="coin">₹</div>
+      <h1>My Savings</h1>
+      <p class="subtitle">How much do you want to save?</p>
+
+      <div class="grid">
+        <button data-amount="10">₹10</button>
+        <button data-amount="20">₹20</button>
+        <button data-amount="30">₹30</button>
+        <button data-amount="50">₹50</button>
+      </div>
+
+      <button id="custom" class="custom">Other amount</button>
+      <p id="status" class="status"></p>
+      <p class="hint">Tap an amount → your UPI app opens → check the details → Pay manually.</p>
+    </section>
+  </main>
+
+  <script src="app.js"></script>
+</body>
+</html>

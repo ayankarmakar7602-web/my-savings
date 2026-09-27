@@ -6,17 +6,23 @@ function pay(amount) {
   amount = Number(amount);
   if (!Number.isFinite(amount) || amount <= 0) return;
 
-  const upi =
-    "upi://pay?pa=" + encodeURIComponent(UPI_ID) +
+  const tx = "SAVE" + Date.now();
+  const params =
+    "pa=" + encodeURIComponent(UPI_ID) +
     "&pn=" + encodeURIComponent(PAYEE_NAME) +
     "&am=" + encodeURIComponent(amount.toFixed(2)) +
-    "&cu=INR";
+    "&cu=INR" +
+    "&tr=" + encodeURIComponent(tx) +
+    "&tn=" + encodeURIComponent("My Savings");
 
-  status.textContent = "Opening UPI app…";
-  window.location.href = upi;
+  // Try PhonePe directly first.
+  const phonePeUrl = "phonepe://pay?" + params;
+
+  status.textContent = "Opening PhonePe…";
+  window.location.href = phonePeUrl;
 
   setTimeout(() => {
-    status.textContent = "If the UPI app doesn't open, tap an amount again.";
+    status.textContent = "If PhonePe did not open, tap the amount again.";
   }, 1800);
 }
 
@@ -28,9 +34,7 @@ document.getElementById("custom").addEventListener("click", () => {
   const value = prompt("Enter amount (₹)");
   if (value === null) return;
 
-  const cleaned = value.trim().replace(/,/g, "");
-  const amount = Number(cleaned);
-
+  const amount = Number(value.trim().replace(/,/g, ""));
   if (!Number.isFinite(amount) || amount <= 0) {
     status.textContent = "Enter a valid amount.";
     return;

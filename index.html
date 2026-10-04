@@ -4,553 +4,1040 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover" />
   <title>My Savings</title>
-  <meta name="theme-color" content="#090d16" />
+  
+  <meta name="theme-color" content="#0a0f1d" />
   <meta name="apple-mobile-web-app-capable" content="yes" />
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
-  <link rel="preconnect" href="https://fonts.googleapis.com" />
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=JetBrains+Mono:wght@500;700&display=swap" rel="stylesheet" />
+  
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=JetBrains+Mono:wght@600;700&display=swap" rel="stylesheet">
 
   <style>
     :root {
-      --bg-dark: #090d16;
-      --bg-card: #131927;
-      --bg-card-subtle: #1a2235;
-      --border-color: rgba(255, 255, 255, 0.08);
-      --border-hover: rgba(255, 255, 255, 0.16);
-      --emerald-primary: #10b981;
-      --emerald-glow: rgba(16, 185, 129, 0.2);
-      --rose-primary: #f43f5e;
-      --amber-primary: #f59e0b;
-      --text-main: #f8fafc;
+      --bg: #0a0f1d;
+      --card-bg: #121929;
+      --card-subtle: #192238;
+      --border: rgba(255, 255, 255, 0.08);
+      --border-focus: rgba(16, 185, 129, 0.4);
+      --emerald: #10b981;
+      --emerald-dark: #059669;
+      --emerald-glow: rgba(16, 185, 129, 0.22);
+      --rose: #f43f5e;
+      --amber: #f59e0b;
+      --text: #f8fafc;
       --text-muted: #94a3b8;
       --text-dim: #64748b;
-      --radius-lg: 20px;
+      --radius-lg: 22px;
       --radius-md: 14px;
-      --radius-sm: 8px;
+      --radius-sm: 10px;
     }
-    * { margin: 0; padding: 0; box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      -webkit-tap-highlight-color: transparent;
+      user-select: none;
+    }
+
     body {
       font-family: 'Plus Jakarta Sans', sans-serif;
-      background-color: var(--bg-dark);
-      color: var(--text-main);
-      line-height: 1.5;
+      background-color: var(--bg);
+      color: var(--text);
+      display: flex;
+      justify-content: center;
       height: 100vh;
       overflow: hidden;
     }
-    .app-container {
-      display: flex; flex-direction: column; height: 100vh;
-      max-width: 460px; margin: 0 auto; position: relative;
-      background-color: var(--bg-dark);
-      border-left: 1px solid rgba(255,255,255,0.04);
-      border-right: 1px solid rgba(255,255,255,0.04);
+
+    .app-viewport {
+      width: 100%;
+      max-width: 440px;
+      height: 100vh;
+      display: flex;
+      flex-direction: column;
+      background: var(--bg);
+      position: relative;
+      border-left: 1px solid rgba(255,255,255,0.03);
+      border-right: 1px solid rgba(255,255,255,0.03);
     }
-    .app-header {
-      padding: 16px 20px; display: flex; align-items: center;
-      justify-content: space-between; border-bottom: 1px solid var(--border-color);
-      background: rgba(9, 13, 22, 0.85); backdrop-filter: blur(12px); z-index: 10;
+
+    /* Top Bar */
+    .top-header {
+      padding: 16px 20px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      border-bottom: 1px solid var(--border);
+      background: rgba(10, 15, 29, 0.85);
+      backdrop-filter: blur(12px);
+      z-index: 20;
     }
-    .brand { display: flex; align-items: center; gap: 12px; }
-    .brand-icon {
-      width: 38px; height: 38px;
-      background: linear-gradient(135deg, #10b981 0%, #047857 100%);
-      border-radius: 12px; display: flex; align-items: center; justify-content: center;
-      font-weight: 800; font-size: 20px; color: #fff; box-shadow: 0 4px 14px var(--emerald-glow);
+
+    .brand-wrap {
+      display: flex;
+      align-items: center;
+      gap: 12px;
     }
-    .brand-text h1 { font-size: 18px; font-weight: 700; }
-    .subtitle { font-size: 11px; color: var(--text-muted); font-weight: 500; }
-    .header-actions { display: flex; gap: 8px; }
-    .icon-btn {
-      background: var(--bg-card); border: 1px solid var(--border-color);
-      color: var(--text-muted); width: 36px; height: 36px; border-radius: 10px;
-      display: flex; align-items: center; justify-content: center; cursor: pointer;
+
+    .brand-logo {
+      width: 40px;
+      height: 40px;
+      background: linear-gradient(135deg, #10b981, #047857);
+      border-radius: 12px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 20px;
+      font-weight: 800;
+      color: #fff;
+      box-shadow: 0 4px 14px var(--emerald-glow);
     }
-    .content-scroll { flex: 1; overflow-y: auto; padding: 18px; padding-bottom: 90px; }
-    .content-scroll::-webkit-scrollbar { display: none; }
-    .tab-view { display: none; animation: fadeIn 0.2s ease-out; }
-    .tab-view.active { display: block; }
-    @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
-    .card {
-      background: var(--bg-card); border: 1px solid var(--border-color);
-      border-radius: var(--radius-lg); padding: 20px; margin-bottom: 20px; position: relative;
+
+    .brand-text h1 {
+      font-size: 18px;
+      font-weight: 700;
+      letter-spacing: -0.02em;
     }
-    .section-block { margin-bottom: 22px; }
-    .section-label { display: block; font-size: 11px; font-weight: 700; color: var(--text-dim); margin-bottom: 10px; }
-    .section-head-row { display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px; }
-    .link-label { font-size: 12px; font-weight: 600; color: var(--emerald-primary); text-decoration: none; cursor: pointer; }
-    .suggestion-card {
-      background: linear-gradient(145deg, #131d2e 0%, #0e1524 100%);
-      border: 1px solid rgba(16, 185, 129, 0.2); text-align: center; padding: 24px 20px;
+
+    .brand-text p {
+      font-size: 11px;
+      color: var(--text-muted);
     }
-    .card-badge {
-      display: inline-block; background: rgba(16, 185, 129, 0.12); color: var(--emerald-primary);
-      font-size: 11px; font-weight: 700; padding: 4px 12px; border-radius: 20px; margin-bottom: 12px;
+
+    .upi-badge {
+      font-size: 10px;
+      font-family: 'JetBrains Mono', monospace;
+      color: var(--emerald);
+      background: rgba(16, 185, 129, 0.1);
+      padding: 4px 8px;
+      border-radius: 6px;
+      border: 1px solid rgba(16, 185, 129, 0.2);
     }
-    .suggested-amount-row { display: flex; align-items: baseline; justify-content: center; gap: 2px; margin-bottom: 6px; }
-    .suggested-amount-row .currency { font-size: 28px; font-weight: 700; color: var(--text-muted); }
-    .suggested-amount-row .amount { font-family: 'JetBrains Mono', monospace; font-size: 52px; font-weight: 800; color: #fff; }
-    .suggestion-tagline { font-size: 13px; color: var(--text-muted); margin-bottom: 20px; }
+
+    /* Content Area */
+    .scroll-body {
+      flex: 1;
+      overflow-y: auto;
+      padding: 18px;
+      padding-bottom: 95px;
+      -webkit-overflow-scrolling: touch;
+    }
+
+    .scroll-body::-webkit-scrollbar { display: none; }
+
+    .tab-content { display: none; }
+    .tab-content.active { display: block; animation: tabFade 0.2s ease-out; }
+
+    @keyframes tabFade {
+      from { opacity: 0; transform: translateY(4px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    /* Suggestion Card */
+    .hero-card {
+      background: linear-gradient(145deg, #141c2f 0%, #0e1424 100%);
+      border: 1px solid rgba(16, 185, 129, 0.25);
+      border-radius: var(--radius-lg);
+      padding: 24px 20px;
+      text-align: center;
+      position: relative;
+      overflow: hidden;
+      margin-bottom: 22px;
+      box-shadow: 0 10px 30px -10px rgba(0,0,0,0.5);
+    }
+
+    .hero-glow {
+      position: absolute;
+      top: -30px;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 140px;
+      height: 100px;
+      background: radial-gradient(circle, var(--emerald-glow) 0%, transparent 70%);
+      filter: blur(25px);
+      pointer-events: none;
+    }
+
+    .hero-pill {
+      display: inline-block;
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: 0.08em;
+      color: var(--emerald);
+      background: rgba(16, 185, 129, 0.12);
+      padding: 4px 12px;
+      border-radius: 20px;
+      margin-bottom: 12px;
+      border: 1px solid rgba(16, 185, 129, 0.2);
+    }
+
+    .hero-amount {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 52px;
+      font-weight: 700;
+      color: #fff;
+      line-height: 1;
+      margin-bottom: 10px;
+      letter-spacing: -0.04em;
+    }
+
+    .hero-sub {
+      font-size: 12.5px;
+      color: var(--text-muted);
+      margin-bottom: 20px;
+    }
+
+    /* Buttons */
     .primary-btn {
-      width: 100%; background: linear-gradient(135deg, #10b981 0%, #059669 100%);
-      color: #fff; border: none; border-radius: var(--radius-md); padding: 14px 20px;
-      font-size: 15px; font-weight: 700; cursor: pointer; display: flex; align-items: center;
-      justify-content: center; gap: 8px; box-shadow: 0 4px 16px var(--emerald-glow);
+      width: 100%;
+      background: linear-gradient(135deg, var(--emerald) 0%, var(--emerald-dark) 100%);
+      color: #fff;
+      border: none;
+      border-radius: var(--radius-md);
+      padding: 15px;
+      font-size: 15px;
+      font-weight: 700;
+      font-family: inherit;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      box-shadow: 0 4px 18px var(--emerald-glow);
+      transition: all 0.2s;
     }
-    .secondary-btn {
-      width: 100%; background: var(--bg-card); border: 1px solid var(--border-color);
-      color: var(--text-main); border-radius: var(--radius-md); padding: 12px 16px;
-      font-size: 14px; font-weight: 600; cursor: pointer; display: flex; align-items: center;
-      justify-content: center; gap: 10px; margin-top: 10px;
+
+    .primary-btn:active { transform: scale(0.98); }
+
+    .btn-secondary {
+      width: 100%;
+      background: var(--card-bg);
+      border: 1px solid var(--border);
+      color: var(--text);
+      border-radius: var(--radius-md);
+      padding: 13px;
+      font-size: 14px;
+      font-weight: 600;
+      font-family: inherit;
+      cursor: pointer;
+      margin-top: 10px;
     }
-    .ghost-btn {
-      width: 100%; background: transparent; border: 1px solid var(--border-color);
-      color: var(--text-muted); border-radius: var(--radius-md); padding: 12px 16px;
-      font-size: 14px; font-weight: 600; cursor: pointer;
+
+    .btn-ghost {
+      width: 100%;
+      background: transparent;
+      border: 1px solid var(--border);
+      color: var(--text-muted);
+      border-radius: var(--radius-md);
+      padding: 12px;
+      font-size: 14px;
+      font-weight: 600;
+      cursor: pointer;
     }
-    .amount-pills { display: grid; grid-template-columns: repeat(4, 1fr); gap: 8px; }
-    .pill-btn {
-      background: var(--bg-card); border: 1px solid var(--border-color); color: var(--text-main);
-      border-radius: var(--radius-md); padding: 12px 0; font-family: 'JetBrains Mono', monospace;
-      font-size: 15px; font-weight: 700; cursor: pointer;
+
+    /* Amount Selector */
+    .section-label {
+      display: block;
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: 0.08em;
+      color: var(--text-dim);
+      margin-bottom: 10px;
     }
-    .pill-btn.active { background: rgba(16, 185, 129, 0.14); border-color: var(--emerald-primary); color: var(--emerald-primary); }
-    .custom-input-wrap { margin-top: 10px; display: flex; gap: 8px; }
-    .input-symbol-wrap { position: relative; flex: 1; }
-    .currency-symbol { position: absolute; left: 14px; top: 50%; transform: translateY(-50%); color: var(--text-dim); font-weight: 700; }
-    .input-symbol-wrap input, .form-group input {
-      width: 100%; background: var(--bg-card); border: 1px solid var(--border-color);
-      border-radius: var(--radius-md); padding: 12px 14px 12px 32px; color: #fff;
-      font-size: 15px; outline: none;
+
+    .pill-group {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 8px;
+      margin-bottom: 12px;
     }
-    .form-group input:not(.currency-input) { padding-left: 14px; }
-    .pill-submit-btn {
-      background: var(--emerald-primary); border: none; border-radius: var(--radius-md);
-      color: #fff; padding: 0 20px; font-weight: 700; cursor: pointer;
+
+    .pill {
+      background: var(--card-bg);
+      border: 1px solid var(--border);
+      color: var(--text);
+      border-radius: var(--radius-md);
+      padding: 12px 0;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 14px;
+      font-weight: 700;
+      cursor: pointer;
+      text-align: center;
+      transition: all 0.2s;
     }
-    .stats-grid { display: flex; flex-direction: column; gap: 10px; }
-    .balance-card { background: linear-gradient(135deg, #172133 0%, #111827 100%); padding: 18px 20px; }
-    .stat-title { display: block; font-size: 10.5px; font-weight: 700; color: var(--text-dim); margin-bottom: 6px; }
-    .balance-card .stat-value { font-family: 'JetBrains Mono', monospace; font-size: 30px; font-weight: 800; color: #fff; }
-    .stat-sub-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
-    .stat-card.mini { background: var(--bg-card); border: 1px solid var(--border-color); border-radius: var(--radius-md); padding: 14px 16px; }
-    .stat-card.mini .stat-value { font-family: 'JetBrains Mono', monospace; font-size: 20px; font-weight: 700; }
-    .text-emerald { color: var(--emerald-primary); }
-    .text-rose { color: var(--rose-primary); }
-    .text-amber { color: var(--amber-primary); }
-    .tx-list { display: flex; flex-direction: column; gap: 10px; }
-    .tx-item {
-      background: var(--bg-card); border: 1px solid var(--border-color);
-      border-radius: var(--radius-md); padding: 14px 16px; display: flex;
-      align-items: center; justify-content: space-between;
+
+    .pill.active {
+      background: rgba(16, 185, 129, 0.12);
+      border-color: var(--emerald);
+      color: var(--emerald);
     }
-    .tx-left { display: flex; align-items: center; gap: 12px; }
-    .tx-type-icon { width: 36px; height: 36px; border-radius: 10px; display: flex; align-items: center; justify-content: center; }
-    .tx-type-icon.deposit { background: rgba(16, 185, 129, 0.12); color: var(--emerald-primary); }
-    .tx-type-icon.withdraw { background: rgba(244, 63, 94, 0.12); color: var(--rose-primary); }
-    .tx-details h4 { font-size: 14px; font-weight: 600; }
-    .tx-details p { font-size: 11px; color: var(--text-muted); }
-    .tx-right { text-align: right; }
-    .tx-amount { font-family: 'JetBrains Mono', monospace; font-size: 15px; font-weight: 700; }
-    .tx-status-badge { display: inline-block; font-size: 10px; font-weight: 700; padding: 2px 6px; border-radius: 4px; margin-top: 3px; }
-    .tx-status-badge.paid { background: rgba(16, 185, 129, 0.15); color: var(--emerald-primary); }
-    .tx-status-badge.pending { background: rgba(245, 158, 11, 0.15); color: var(--amber-primary); cursor: pointer; }
-    .empty-state { text-align: center; padding: 25px 10px; color: var(--text-dim); font-size: 13px; }
-    .form-group { margin-bottom: 16px; }
-    .form-group label { display: block; font-size: 12px; font-weight: 600; color: var(--text-muted); margin-bottom: 6px; }
-    .form-balance-badge {
-      background: var(--bg-card-subtle); border: 1px solid var(--border-color);
-      padding: 10px 14px; border-radius: var(--radius-sm); display: flex; justify-content: space-between; margin-bottom: 16px;
+
+    .custom-input-box {
+      display: flex;
+      gap: 8px;
+      margin-bottom: 22px;
     }
-    .bottom-nav {
-      position: absolute; bottom: 0; left: 0; right: 0; background: rgba(14, 20, 32, 0.95);
-      backdrop-filter: blur(14px); border-top: 1px solid var(--border-color); display: flex;
-      justify-content: space-around; padding: 8px 10px 14px 10px; z-index: 10;
+
+    .input-field {
+      flex: 1;
+      position: relative;
     }
-    .nav-item {
-      background: transparent; border: none; display: flex; flex-direction: column;
-      align-items: center; gap: 4px; color: var(--text-dim); font-size: 11px; font-weight: 600; cursor: pointer;
+
+    .input-field span {
+      position: absolute;
+      left: 14px;
+      top: 50%;
+      transform: translateY(-50%);
+      color: var(--text-dim);
+      font-weight: 700;
     }
-    .nav-item.active { color: var(--emerald-primary); }
-    .modal-backdrop {
-      position: fixed; inset: 0; background: rgba(0, 0, 0, 0.75); backdrop-filter: blur(6px);
-      display: flex; align-items: center; justify-content: center; padding: 20px; z-index: 100;
+
+    .input-field input, .form-control {
+      width: 100%;
+      background: var(--card-bg);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-md);
+      padding: 12px 14px 12px 32px;
+      color: #fff;
+      font-size: 15px;
+      font-family: inherit;
+      outline: none;
     }
-    .modal-backdrop.hidden, .hidden { display: none !important; }
-    .modal-card {
-      background: #151d2e; border: 1px solid rgba(255, 255, 255, 0.12);
-      border-radius: var(--radius-lg); padding: 24px; width: 100%; max-width: 380px; text-align: center;
+
+    .form-control:not(.with-sym) { padding-left: 14px; }
+    .input-field input:focus, .form-control:focus { border-color: var(--emerald); }
+
+    .custom-pay-btn {
+      background: var(--emerald);
+      border: none;
+      border-radius: var(--radius-md);
+      color: #fff;
+      padding: 0 20px;
+      font-weight: 700;
+      font-size: 14px;
+      cursor: pointer;
     }
-    .pending-tx-details {
-      background: rgba(0, 0, 0, 0.25); border-radius: var(--radius-sm); padding: 10px 14px;
-      font-size: 13px; margin: 14px 0; display: flex; justify-content: space-between;
+
+    /* Stats Overview */
+    .stats-container {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      margin-bottom: 24px;
     }
-    .modal-actions { display: flex; flex-direction: column; gap: 8px; }
+
+    .card-balance {
+      background: linear-gradient(135deg, #172236 0%, #101726 100%);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-lg);
+      padding: 18px 20px;
+    }
+
+    .card-balance .val {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 32px;
+      font-weight: 700;
+      color: #fff;
+      margin-top: 4px;
+    }
+
+    .sub-stats {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 10px;
+    }
+
+    .stat-box {
+      background: var(--card-bg);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-md);
+      padding: 14px 16px;
+    }
+
+    .stat-box .val {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 20px;
+      font-weight: 700;
+      margin-top: 4px;
+    }
+
+    .text-emerald { color: var(--emerald); }
+    .text-rose { color: var(--rose); }
+    .text-amber { color: var(--amber); }
+
+    /* Transactions */
+    .tx-section-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 12px;
+    }
+
+    .tx-link {
+      font-size: 12px;
+      font-weight: 600;
+      color: var(--emerald);
+      cursor: pointer;
+    }
+
+    .tx-list {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+
+    .tx-row {
+      background: var(--card-bg);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-md);
+      padding: 14px 16px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .tx-left h4 {
+      font-size: 14px;
+      font-weight: 600;
+      margin-bottom: 2px;
+    }
+
+    .tx-left p {
+      font-size: 11px;
+      color: var(--text-muted);
+    }
+
+    .tx-right {
+      text-align: right;
+    }
+
+    .tx-amount {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 16px;
+      font-weight: 700;
+      display: block;
+    }
+
+    .tx-status-label {
+      font-size: 11px;
+      font-weight: 700;
+      margin-top: 2px;
+      display: inline-block;
+    }
+
+    .tx-status-label.paid { color: var(--emerald); }
+    .tx-status-label.pending { color: var(--amber); cursor: pointer; text-decoration: underline; }
+
+    .empty-placeholder {
+      text-align: center;
+      padding: 30px 10px;
+      color: var(--text-dim);
+      font-size: 13px;
+    }
+
+    /* Withdraw View */
+    .form-group {
+      margin-bottom: 16px;
+    }
+
+    .form-group label {
+      display: block;
+      font-size: 12px;
+      font-weight: 600;
+      color: var(--text-muted);
+      margin-bottom: 6px;
+    }
+
+    .balance-pill-badge {
+      background: var(--card-subtle);
+      border: 1px solid var(--border);
+      padding: 12px 16px;
+      border-radius: var(--radius-md);
+      display: flex;
+      justify-content: space-between;
+      margin-bottom: 20px;
+      font-size: 13.5px;
+    }
+
+    /* Bottom Nav */
+    .bottom-bar {
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      background: rgba(10, 15, 29, 0.95);
+      backdrop-filter: blur(14px);
+      border-top: 1px solid var(--border);
+      display: flex;
+      justify-content: space-around;
+      padding: 10px 12px 16px 12px;
+      z-index: 20;
+    }
+
+    .nav-btn {
+      background: none;
+      border: none;
+      color: var(--text-dim);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 4px;
+      font-size: 11px;
+      font-weight: 600;
+      cursor: pointer;
+    }
+
+    .nav-btn.active { color: var(--emerald); }
+
+    /* Modal */
+    .modal-overlay {
+      position: fixed;
+      inset: 0;
+      background: rgba(0,0,0,0.75);
+      backdrop-filter: blur(5px);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 20px;
+      z-index: 100;
+    }
+
+    .modal-sheet {
+      background: #141c2d;
+      border: 1px solid rgba(255,255,255,0.12);
+      border-radius: var(--radius-lg);
+      padding: 24px;
+      width: 100%;
+      max-width: 380px;
+      text-align: center;
+    }
+
+    .modal-sheet h3 {
+      font-size: 18px;
+      font-weight: 700;
+      margin-bottom: 6px;
+    }
+
+    .modal-sheet p {
+      font-size: 13px;
+      color: var(--text-muted);
+      margin-bottom: 16px;
+    }
+
+    .modal-tx-box {
+      background: rgba(0,0,0,0.3);
+      border-radius: var(--radius-sm);
+      padding: 10px 14px;
+      display: flex;
+      justify-content: space-between;
+      font-size: 13px;
+      margin-bottom: 16px;
+      text-align: left;
+    }
+
+    .modal-actions {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+
+    .hidden { display: none !important; }
   </style>
 </head>
 <body>
-  <div class="app-container">
-    <header class="app-header">
-      <div class="brand">
-        <div class="brand-icon">₹</div>
+
+  <div class="app-viewport">
+    <!-- Header -->
+    <header class="top-header">
+      <div class="brand-wrap">
+        <div class="brand-logo">₹</div>
         <div class="brand-text">
           <h1>My Savings</h1>
-          <p class="subtitle">Daily Habit · 8116603529@mbk</p>
+          <p>Personal Ledger</p>
         </div>
       </div>
-      <div class="header-actions">
-        <button id="backupBtn" class="icon-btn" title="Settings">⚙️</button>
-      </div>
+      <div class="upi-badge">8116603529@mbk</div>
     </header>
 
-    <main class="content-scroll">
-      <!-- HOME TAB -->
-      <section id="tab-home" class="tab-view active">
-        <div class="card suggestion-card">
-          <div class="card-badge">TODAY'S SUGGESTION</div>
-          <div class="suggested-amount-row">
-            <span class="currency">₹</span>
-            <span id="suggestedAmountDisplay" class="amount">15</span>
-          </div>
-          <p class="suggestion-tagline">Save small, build big. Let's do it today!</p>
-          <button id="paySuggestedBtn" class="primary-btn">
-            Pay ₹<span id="paySuggestedAmountText">15</span> Now
+    <!-- Scroll Content -->
+    <main class="scroll-body">
+      
+      <!-- TAB 1: HOME -->
+      <section id="tab-home" class="tab-content active">
+        <!-- Hero Suggestion Card -->
+        <div class="hero-card">
+          <div class="hero-glow"></div>
+          <div class="hero-pill">TODAY'S SUGGESTION</div>
+          <div class="hero-amount">₹<span id="suggestedAmountText">15</span></div>
+          <p class="hero-sub">Daily micro-savings habit for MobiKwik</p>
+          <button id="heroPayBtn" class="primary-btn">
+            Pay ₹<span id="heroPayAmountText">15</span>
           </button>
         </div>
 
-        <div class="section-block">
-          <label class="section-label">CHOOSE DIFFERENT AMOUNT</label>
-          <div class="amount-pills">
-            <button class="pill-btn" data-amt="10">₹10</button>
-            <button class="pill-btn active" data-amt="15">₹15</button>
-            <button class="pill-btn" data-amt="20">₹20</button>
-            <button class="pill-btn" id="customPillBtn">Custom</button>
+        <!-- Amount Selection -->
+        <div style="margin-bottom: 22px;">
+          <span class="section-label">CHOOSE AMOUNT</span>
+          <div class="pill-group">
+            <button class="pill" data-amt="10">₹10</button>
+            <button class="pill active" data-amt="15">₹15</button>
+            <button class="pill" data-amt="20">₹20</button>
+            <button class="pill" id="customAmountPill">Custom</button>
           </div>
-          <div id="customInputWrap" class="custom-input-wrap hidden">
-            <div class="input-symbol-wrap">
-              <span class="currency-symbol">₹</span>
-              <input type="number" id="customAmountInput" placeholder="Amount" min="1" inputmode="numeric" />
+
+          <div id="customInputWrap" class="custom-input-box hidden">
+            <div class="input-field">
+              <span>₹</span>
+              <input type="number" id="customAmountVal" placeholder="Enter amount" min="1" inputmode="numeric" />
             </div>
-            <button id="payCustomBtn" class="pill-submit-btn">Pay</button>
+            <button id="customPaySubmit" class="custom-pay-btn">Pay</button>
           </div>
         </div>
 
-        <div class="section-block">
-          <label class="section-label">PORTFOLIO OVERVIEW</label>
-          <div class="stats-grid">
-            <div class="stat-card balance-card">
-              <span class="stat-title">CURRENT BALANCE</span>
-              <span class="stat-value" id="currentBalanceDisplay">₹0</span>
+        <!-- Stats Overview -->
+        <div class="stats-container">
+          <span class="section-label" style="margin-bottom: 0;">FINANCIAL OVERVIEW</span>
+          <div class="card-balance">
+            <span class="section-label">CURRENT BALANCE</span>
+            <div class="val" id="dispCurrentBalance">₹0</div>
+          </div>
+          <div class="sub-stats">
+            <div class="stat-box">
+              <span class="section-label">TOTAL SAVED</span>
+              <div class="val text-emerald" id="dispTotalSaved">₹0</div>
             </div>
-            <div class="stat-sub-grid">
-              <div class="stat-card mini">
-                <span class="stat-title">TOTAL SAVED</span>
-                <span class="stat-value text-emerald" id="totalSavedDisplay">₹0</span>
-              </div>
-              <div class="stat-card mini">
-                <span class="stat-title">WITHDRAWN</span>
-                <span class="stat-value text-rose" id="totalWithdrawnDisplay">₹0</span>
-              </div>
+            <div class="stat-box">
+              <span class="section-label">WITHDRAWN</span>
+              <div class="val text-rose" id="dispTotalWithdrawn">₹0</div>
             </div>
           </div>
         </div>
 
-        <div class="section-block">
-          <div class="section-head-row">
-            <label class="section-label">RECENT TRANSACTIONS</label>
-            <span id="seeAllHistoryLink" class="link-label">View All</span>
+        <!-- Recent Transactions -->
+        <div>
+          <div class="tx-section-header">
+            <span class="section-label" style="margin-bottom: 0;">RECENT TRANSACTIONS</span>
+            <span id="gotoHistoryLink" class="tx-link">View All</span>
           </div>
-          <div id="recentTransactionsList" class="tx-list"></div>
+          <div id="homeTxList" class="tx-list"></div>
         </div>
       </section>
 
-      <!-- HISTORY TAB -->
-      <section id="tab-history" class="tab-view">
-        <h2 style="font-size: 20px; font-weight: 700; margin-bottom: 12px;">Transaction History</h2>
-        <div id="fullTransactionsList" class="tx-list"></div>
+      <!-- TAB 2: HISTORY -->
+      <section id="tab-history" class="tab-content">
+        <h2 style="font-size: 20px; font-weight: 700; margin-bottom: 16px;">All Transactions</h2>
+        <div id="fullTxList" class="tx-list"></div>
       </section>
 
-      <!-- WITHDRAW TAB -->
-      <section id="tab-withdraw" class="tab-view">
-        <div class="card">
-          <h2 style="font-size: 18px; margin-bottom: 6px;">Record Withdrawal</h2>
-          <div class="form-balance-badge">
-            <span>Available:</span>
-            <strong id="withdrawAvailableBalance">₹0</strong>
+      <!-- TAB 3: WITHDRAW -->
+      <section id="tab-withdraw" class="tab-content">
+        <div style="background: var(--card-bg); border: 1px solid var(--border); border-radius: var(--radius-lg); padding: 20px;">
+          <h2 style="font-size: 18px; font-weight: 700; margin-bottom: 6px;">Record Withdrawal</h2>
+          <p style="font-size: 12px; color: var(--text-muted); margin-bottom: 16px;">This tracks when you withdraw or spend from your savings wallet.</p>
+          
+          <div class="balance-pill-badge">
+            <span style="color: var(--text-muted);">Available to withdraw:</span>
+            <strong id="withdrawAvailBalance">₹0</strong>
           </div>
+
           <form id="withdrawForm">
             <div class="form-group">
               <label>Amount (₹)</label>
-              <div class="input-symbol-wrap">
-                <span class="currency-symbol">₹</span>
-                <input type="number" id="withdrawAmount" placeholder="e.g. 100" min="1" required inputmode="numeric" />
+              <div class="input-field">
+                <span>₹</span>
+                <input type="number" id="withdrawAmtInput" placeholder="100" min="1" required inputmode="numeric" />
               </div>
             </div>
             <div class="form-group">
-              <label>Note (Optional)</label>
-              <input type="text" id="withdrawNote" placeholder="Personal use" />
+              <label>Note / Reason (Optional)</label>
+              <input type="text" id="withdrawNoteInput" class="form-control" placeholder="Personal use, emergency..." />
             </div>
-            <button type="submit" class="primary-btn">Record Withdrawal</button>
+            <button type="submit" class="primary-btn" style="margin-top: 10px;">Record Withdrawal</button>
           </form>
         </div>
       </section>
 
-      <!-- SETTINGS TAB -->
-      <section id="tab-settings" class="tab-view">
-        <div class="card">
-          <h3 style="margin-bottom: 10px;">Payee Details</h3>
-          <p style="font-size: 13px; color: var(--text-muted); margin-bottom: 6px;">UPI ID: <code style="color:#fff;">8116603529@mbk</code></p>
-          <p style="font-size: 13px; color: var(--text-muted);">Name: <strong>My Savings</strong></p>
+      <!-- TAB 4: SETTINGS & BACKUP -->
+      <section id="tab-settings" class="tab-content">
+        <div style="background: var(--card-bg); border: 1px solid var(--border); border-radius: var(--radius-lg); padding: 20px; margin-bottom: 16px;">
+          <h3 style="font-size: 16px; margin-bottom: 10px;">Payee Information</h3>
+          <p style="font-size: 13px; color: var(--text-muted); margin-bottom: 6px;">VPA: <strong style="color: #fff;">8116603529@mbk</strong></p>
+          <p style="font-size: 13px; color: var(--text-muted); margin-bottom: 6px;">Name: <strong>My Savings</strong></p>
+          <p style="font-size: 11px; color: var(--text-dim); margin-top: 10px;">Deep-link scheme: Standard Android UPI Intent (Navi, PhonePe, GPay, Paytm).</p>
         </div>
-        <div class="card">
-          <h3 style="margin-bottom: 10px;">Data Backup</h3>
-          <button id="exportCsvBtn" class="secondary-btn">📊 Export to CSV (Excel)</button>
-          <button id="backupJsonBtn" class="secondary-btn">💾 Download JSON Backup</button>
-          <button id="clearAllBtn" class="secondary-btn" style="color:var(--rose-primary); border-color: rgba(244,63,94,0.3);">🗑️ Clear All Data</button>
+
+        <div style="background: var(--card-bg); border: 1px solid var(--border); border-radius: var(--radius-lg); padding: 20px;">
+          <h3 style="font-size: 16px; margin-bottom: 10px;">Backup & Portability</h3>
+          <button id="exportCsvBtn" class="btn-secondary">📊 Export to CSV (Excel)</button>
+          <button id="backupJsonBtn" class="btn-secondary">💾 Backup Data (JSON)</button>
+          <button id="clearDataBtn" class="btn-secondary" style="color: var(--rose); border-color: rgba(244,63,94,0.3);">🗑️ Reset Ledger</button>
         </div>
       </section>
+
     </main>
 
-    <!-- Bottom Nav -->
-    <nav class="bottom-nav">
-      <button class="nav-item active" data-tab="tab-home"><span>🏠 Home</span></button>
-      <button class="nav-item" data-tab="tab-history"><span>📜 History</span></button>
-      <button class="nav-item" data-tab="tab-withdraw"><span>💸 Withdraw</span></button>
-      <button class="nav-item" data-tab="tab-settings"><span>⚙️ Settings</span></button>
+    <!-- Bottom Navigation -->
+    <nav class="bottom-bar">
+      <button class="nav-btn active" data-tab="tab-home">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
+        <span>Home</span>
+      </button>
+      <button class="nav-btn" data-tab="tab-history">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+        <span>History</span>
+      </button>
+      <button class="nav-btn" data-tab="tab-withdraw">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="5" x2="12" y2="19"/><polyline points="19 12 12 19 5 12"/></svg>
+        <span>Withdraw</span>
+      </button>
+      <button class="nav-btn" data-tab="tab-settings">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>
+        <span>Settings</span>
+      </button>
     </nav>
   </div>
 
-  <!-- Verification Modal -->
-  <div id="verifyModal" class="modal-backdrop hidden">
-    <div class="modal-card">
-      <h3 style="font-size: 18px; margin-bottom: 6px;">Payment Complete?</h3>
-      <p style="font-size: 13px; color: var(--text-muted);">Did you approve the payment in Navi / UPI app?</p>
-      <div class="pending-tx-details">
-        <span>Amount: <strong id="verifyModalAmount">₹15</strong></span>
-        <span>Tx: <code id="verifyModalTxId">TXN123</code></span>
+  <!-- Honest Payment Verification Modal -->
+  <div id="verifyModal" class="modal-overlay hidden">
+    <div class="modal-sheet">
+      <div style="width: 50px; height: 50px; background: rgba(16,185,129,0.12); border-radius: 14px; margin: 0 auto 14px auto; display:flex; align-items:center; justify-content:center;">
+        <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="#10b981" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>
       </div>
-      <div class="form-group" style="text-align: left;">
-        <label>Bank Ref / UTR (Optional)</label>
-        <input type="text" id="verifyModalUtr" placeholder="e.g. 427920182811" />
+      <h3>Did you complete the payment?</h3>
+      <p>Navi or UPI app was opened. Confirm whether the money was deposited successfully.</p>
+      
+      <div class="modal-tx-box">
+        <span>Amount: <strong id="modalTxAmount">₹15</strong></span>
+        <span>ID: <code id="modalTxId">TXN000</code></span>
       </div>
+
+      <div class="form-group" style="text-align: left; margin-bottom: 18px;">
+        <label>Payment Reference / UTR (Optional)</label>
+        <input type="text" id="modalUtrInput" class="form-control" placeholder="e.g. 427920182811" />
+      </div>
+
       <div class="modal-actions">
-        <button id="confirmPaidBtn" class="primary-btn">Yes, Payment Completed ✓</button>
-        <button id="cancelPendingBtn" class="ghost-btn">Cancel / Still Pending</button>
+        <button id="modalConfirmBtn" class="primary-btn">Yes, Payment Completed ✓</button>
+        <button id="modalCancelBtn" class="btn-ghost">Cancel / Still Pending</button>
       </div>
     </div>
   </div>
 
+  <!-- Application Logic -->
   <script>
-    // --- INDEXEDDB MODULE ---
-    const DB_NAME = 'MySavingsDB';
+    // 1. IndexedDB Initialization
+    const DB_NAME = 'MyPersonalSavingsDB';
     let db;
-    function initDB() {
+
+    function openDatabase() {
       return new Promise((resolve) => {
         const req = indexedDB.open(DB_NAME, 1);
         req.onupgradeneeded = (e) => {
           const d = e.target.result;
-          if (!d.objectStoreNames.contains('deposits')) d.createObjectStore('deposits', { keyPath: 'id' });
+          if (!d.objectStoreNames.contains('payments')) d.createObjectStore('payments', { keyPath: 'id' });
           if (!d.objectStoreNames.contains('withdrawals')) d.createObjectStore('withdrawals', { keyPath: 'id' });
         };
-        req.onsuccess = (e) => { db = e.target.result; resolve(db); };
+        req.onsuccess = (e) => {
+          db = e.target.result;
+          resolve(db);
+        };
       });
     }
-    const dbOp = (store, mode, method, data) => new Promise((resolve) => {
+
+    const dbQuery = (store, mode, method, data) => new Promise((resolve) => {
       const tx = db.transaction([store], mode);
       const s = tx.objectStore(store);
       const req = data !== undefined ? s[method](data) : s[method]();
       req.onsuccess = () => resolve(req.result);
     });
 
-    // --- APP CONTROLLER ---
-    const SUGGESTIONS = [10, 15, 20];
-    let todaySuggestion = 15;
+    // 2. Daily Suggestion Engine (Rotates: ₹10, ₹15, ₹20)
+    const ROTATION_POOL = [10, 15, 20];
+    let dailySuggestedAmount = 15;
     let pendingTx = null;
 
-    document.addEventListener('DOMContentLoaded', async () => {
-      await initDB();
-      initDailySuggestion();
-      bindEvents();
-      await refreshUI();
-      checkPending();
-    });
+    function calculateTodaySuggestion() {
+      const now = new Date();
+      // Deterministic daily hash based on calendar day
+      const dayHash = now.getFullYear() * 10000 + (now.getMonth() + 1) * 100 + now.getDate();
+      dailySuggestedAmount = ROTATION_POOL[Math.abs(dayHash % ROTATION_POOL.length)];
 
-    function initDailySuggestion() {
-      const t = new Date();
-      const seed = t.getFullYear() * 10000 + (t.getMonth() + 1) * 100 + t.getDate();
-      todaySuggestion = SUGGESTIONS[Math.abs(seed % SUGGESTIONS.length)];
-      document.getElementById('suggestedAmountDisplay').textContent = todaySuggestion;
-      document.getElementById('paySuggestedAmountText').textContent = todaySuggestion;
-      document.querySelectorAll('.pill-btn[data-amt]').forEach(b => {
-        b.classList.toggle('active', parseInt(b.getAttribute('data-amt')) === todaySuggestion);
+      document.getElementById('suggestedAmountText').textContent = dailySuggestedAmount;
+      document.getElementById('heroPayAmountText').textContent = dailySuggestedAmount;
+
+      document.querySelectorAll('.pill[data-amt]').forEach(btn => {
+        btn.classList.toggle('active', parseInt(btn.getAttribute('data-amt')) === dailySuggestedAmount);
       });
     }
 
-    function bindEvents() {
-      document.getElementById('paySuggestedBtn').onclick = () => payUPI(todaySuggestion);
+    // 3. Navigation
+    function switchTab(tabId) {
+      document.querySelectorAll('.tab-content').forEach(t => t.classList.remove('active'));
+      document.querySelectorAll('.bottom-bar .nav-btn').forEach(b => b.classList.remove('active'));
       
-      document.querySelectorAll('.pill-btn[data-amt]').forEach(b => {
-        b.onclick = (e) => {
-          document.querySelectorAll('.pill-btn').forEach(btn => btn.classList.remove('active'));
-          e.target.classList.add('active');
-          document.getElementById('customInputWrap').classList.add('hidden');
-          payUPI(parseInt(e.target.getAttribute('data-amt')));
-        };
-      });
+      const target = document.getElementById(tabId);
+      if (target) target.classList.add('active');
 
-      document.getElementById('customPillBtn').onclick = () => {
-        document.querySelectorAll('.pill-btn').forEach(btn => btn.classList.remove('active'));
-        document.getElementById('customPillBtn').classList.add('active');
-        document.getElementById('customInputWrap').classList.remove('hidden');
-        document.getElementById('customAmountInput').focus();
-      };
-
-      document.getElementById('payCustomBtn').onclick = () => {
-        const val = parseInt(document.getElementById('customAmountInput').value);
-        if (val && val > 0) payUPI(val);
-      };
-
-      document.getElementById('withdrawForm').onsubmit = async (e) => {
-        e.preventDefault();
-        const amt = parseFloat(document.getElementById('withdrawAmount').value);
-        const note = document.getElementById('withdrawNote').value.trim() || 'Manual Withdrawal';
-        await dbOp('withdrawals', 'readwrite', 'add', { id: 'WTH-' + Date.now(), amount: amt, date: new Date().toISOString(), note });
-        document.getElementById('withdrawForm').reset();
-        await refreshUI();
-        switchTab('tab-home');
-      };
-
-      document.getElementById('confirmPaidBtn').onclick = async () => {
-        if (!pendingTx) return;
-        pendingTx.status = 'PAID';
-        pendingTx.reference = document.getElementById('verifyModalUtr').value.trim();
-        await dbOp('deposits', 'readwrite', 'put', pendingTx);
-        closeModal();
-        await refreshUI();
-      };
-
-      document.getElementById('cancelPendingBtn').onclick = closeModal;
-
-      document.querySelectorAll('.bottom-nav .nav-item').forEach(btn => {
-        btn.onclick = () => switchTab(btn.getAttribute('data-tab'));
-      });
-
-      document.getElementById('seeAllHistoryLink').onclick = () => switchTab('tab-history');
-      document.getElementById('backupBtn').onclick = () => switchTab('tab-settings');
-
-      document.getElementById('exportCsvBtn').onclick = exportCSV;
-      document.getElementById('backupJsonBtn').onclick = backupJSON;
-      document.getElementById('clearAllBtn').onclick = async () => {
-        if (confirm('সব ডেটা মুছে ফেলবি?')) {
-          await dbOp('deposits', 'readwrite', 'clear');
-          await dbOp('withdrawals', 'readwrite', 'clear');
-          await refreshUI();
-        }
-      };
-
-      window.onfocus = checkPending;
+      const btn = document.querySelector(`.bottom-bar .nav-btn[data-tab="${tabId}"]`);
+      if (btn) btn.classList.add('active');
     }
 
-    async function payUPI(amount) {
+    // 4. UPI Trigger & Honest Verification Mechanism
+    async function startPaymentFlow(amount) {
       const txId = 'TXN' + Date.now().toString().slice(-8);
-      const record = { id: txId, amount: amount, date: new Date().toISOString(), status: 'PENDING', reference: '', note: 'Daily Deposit' };
-      await dbOp('deposits', 'readwrite', 'add', record);
-      sessionStorage.setItem('pending_tx', JSON.stringify(record));
+      
+      const newPayment = {
+        id: txId,
+        amount: Number(amount),
+        date: new Date().toISOString(),
+        status: 'PENDING',
+        reference: '',
+        note: 'Deposit'
+      };
 
-      // Android Navi & Standard UPI Intent Scheme
-      const upiUrl = `upi://pay?pa=8116603529@mbk&pn=My%20Savings&am=${amount.toFixed(2)}&cu=INR&tr=${txId}&tn=My%20Savings`;
+      // Store initially as PENDING
+      await dbQuery('payments', 'readwrite', 'add', newPayment);
+      sessionStorage.setItem('active_pending_tx', JSON.stringify(newPayment));
+
+      // Standard Android UPI Intent Scheme
+      const upiUrl = `upi://pay?pa=8116603529@mbk&pn=My%20Savings&am=${Number(amount).toFixed(2)}&cu=INR&tr=${txId}&tn=My%20Savings`;
+      
+      // Open Navi / UPI
       window.location.href = upiUrl;
     }
 
-    function checkPending() {
-      const raw = sessionStorage.getItem('pending_tx');
-      if (raw) {
-        pendingTx = JSON.parse(raw);
-        document.getElementById('verifyModalAmount').textContent = `₹${pendingTx.amount}`;
-        document.getElementById('verifyModalTxId').textContent = pendingTx.id;
-        document.getElementById('verifyModalUtr').value = '';
+    function checkPendingPayment() {
+      const stored = sessionStorage.getItem('active_pending_tx');
+      if (stored) {
+        pendingTx = JSON.parse(stored);
+        document.getElementById('modalTxAmount').textContent = `₹${pendingTx.amount}`;
+        document.getElementById('modalTxId').textContent = pendingTx.id;
+        document.getElementById('modalUtrInput').value = '';
         document.getElementById('verifyModal').classList.remove('hidden');
       }
     }
 
-    function closeModal() {
+    function dismissModal() {
       document.getElementById('verifyModal').classList.add('hidden');
-      sessionStorage.removeItem('pending_tx');
+      sessionStorage.removeItem('active_pending_tx');
       pendingTx = null;
     }
 
-    function switchTab(tabId) {
-      document.querySelectorAll('.tab-view').forEach(v => v.classList.remove('active'));
-      document.querySelectorAll('.bottom-nav .nav-item').forEach(n => n.classList.remove('active'));
-      document.getElementById(tabId).classList.add('active');
-      const navBtn = document.querySelector(`.bottom-nav .nav-item[data-tab="${tabId}"]`);
-      if (navBtn) navBtn.classList.add('active');
+    // 5. Dashboard Refresh & Formatter
+    function formatDateTime(isoString) {
+      const d = new Date(isoString);
+      const day = String(d.getDate()).padStart(2, '0');
+      const monthNames = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
+      const month = monthNames[d.getMonth()];
+      
+      let hours = d.getHours();
+      const minutes = String(d.getMinutes()).padStart(2, '0');
+      const ampm = hours >= 12 ? 'PM' : 'AM';
+      hours = hours % 12 || 12;
+
+      return `${day} ${month} · ${hours}:${minutes} ${ampm}`;
     }
 
-    async function refreshUI() {
-      const deposits = (await dbOp('deposits', 'readonly', 'getAll')) || [];
-      const withdrawals = (await dbOp('withdrawals', 'readonly', 'getAll')) || [];
+    async function refreshDashboard() {
+      const deposits = (await dbQuery('payments', 'readonly', 'getAll')) || [];
+      const withdrawals = (await dbQuery('withdrawals', 'readonly', 'getAll')) || [];
 
-      const saved = deposits.filter(d => d.status === 'PAID').reduce((s, d) => s + Number(d.amount), 0);
-      const withdrawn = withdrawals.reduce((s, w) => s + Number(w.amount), 0);
-      const balance = saved - withdrawn;
+      // Total Saved = confirmed deposits (PAID)
+      const totalSaved = deposits
+        .filter(d => d.status === 'PAID')
+        .reduce((sum, d) => sum + Number(d.amount), 0);
 
-      document.getElementById('currentBalanceDisplay').textContent = `₹${balance.toLocaleString('en-IN')}`;
-      document.getElementById('totalSavedDisplay').textContent = `₹${saved.toLocaleString('en-IN')}`;
-      document.getElementById('totalWithdrawnDisplay').textContent = `₹${withdrawn.toLocaleString('en-IN')}`;
-      document.getElementById('withdrawAvailableBalance').textContent = `₹${balance.toLocaleString('en-IN')}`;
+      // Total Withdrawn
+      const totalWithdrawn = withdrawals
+        .reduce((sum, w) => sum + Number(w.amount), 0);
 
-      const all = [
-        ...deposits.map(d => ({ ...d, type: 'deposit' })),
-        ...withdrawals.map(w => ({ ...w, type: 'withdrawal', status: 'PAID' }))
+      // Current Balance
+      const currentBalance = totalSaved - totalWithdrawn;
+
+      document.getElementById('dispCurrentBalance').textContent = `₹${currentBalance.toLocaleString('en-IN')}`;
+      document.getElementById('dispTotalSaved').textContent = `₹${totalSaved.toLocaleString('en-IN')}`;
+      document.getElementById('dispTotalWithdrawn').textContent = `₹${totalWithdrawn.toLocaleString('en-IN')}`;
+      document.getElementById('withdrawAvailBalance').textContent = `₹${currentBalance.toLocaleString('en-IN')}`;
+
+      // Combine for history display
+      const allTx = [
+        ...deposits.map(d => ({ ...d, isDeposit: true })),
+        ...withdrawals.map(w => ({ ...w, isDeposit: false, status: 'PAID' }))
       ].sort((a, b) => new Date(b.date) - new Date(a.date));
 
-      const renderList = (items) => {
-        if (!items.length) return '<div class="empty-state">No transactions yet.</div>';
-        return items.map(item => `
-          <div class="tx-item">
-            <div class="tx-left">
-              <div class="tx-type-icon ${item.type}">${item.type === 'deposit' ? '↓' : '↑'}</div>
-              <div class="tx-details">
-                <h4>${item.type === 'deposit' ? 'Deposit' : 'Withdrawal'}</h4>
-                <p>${new Date(item.date).toLocaleDateString('en-IN', { day: '2-digit', month: 'short' })} · ${item.note || ''}</p>
+      const renderTxHtml = (list) => {
+        if (!list.length) return `<div class="empty-placeholder">No transactions found.<br>Save ₹${dailySuggestedAmount} today!</div>`;
+        return list.map(tx => {
+          const formattedDate = formatDateTime(tx.date);
+          const isDeposit = tx.isDeposit;
+          const isPaid = tx.status === 'PAID';
+
+          let statusMarkup = '';
+          if (isDeposit) {
+            statusMarkup = isPaid 
+              ? `<span class="tx-status-label paid">Deposit · PAID ✓</span>`
+              : `<span class="tx-status-label pending" onclick="verifySpecificTx('${tx.id}')">Deposit · PENDING ⏳</span>`;
+          } else {
+            statusMarkup = `<span class="tx-status-label" style="color:var(--text-muted)">Withdrawal · ${tx.note || 'Cash'}</span>`;
+          }
+
+          return `
+            <div class="tx-row">
+              <div class="tx-left">
+                <span class="tx-amount ${isDeposit ? 'text-emerald' : 'text-rose'}">
+                  ${isDeposit ? '' : '-'}₹${tx.amount}
+                </span>
+                <p>${formattedDate}</p>
+              </div>
+              <div class="tx-right">
+                ${statusMarkup}
               </div>
             </div>
-            <div class="tx-right">
-              <span class="tx-amount ${item.type === 'deposit' ? 'text-emerald' : 'text-rose'}">
-                ${item.type === 'deposit' ? '+' : '-'}₹${item.amount}
-              </span>
-              <span class="tx-status-badge ${item.status === 'PAID' ? 'paid' : 'pending'}">${item.status}</span>
-            </div>
-          </div>
-        `).join('');
+          `;
+        }).join('');
       };
 
-      document.getElementById('recentTransactionsList').innerHTML = renderList(all.slice(0, 5));
-      document.getElementById('fullTransactionsList').innerHTML = renderList(all);
+      document.getElementById('homeTxList').innerHTML = renderTxHtml(allTx.slice(0, 5));
+      document.getElementById('fullTxList').innerHTML = renderTxHtml(allTx);
     }
 
-    async function exportCSV() {
-      const deposits = await dbOp('deposits', 'readonly', 'getAll');
-      const withdrawals = await dbOp('withdrawals', 'readonly', 'getAll');
-      let csv = 'Type,ID,Amount,Date,Status,Reference,Note\\n';
-      deposits.forEach(d => csv += `Deposit,"${d.id}",${d.amount},"${d.date}","${d.status}","${d.reference || ''}","${d.note || ''}"\\n`);
-      withdrawals.forEach(w => csv += `Withdrawal,"${w.id}",${w.amount},"${w.date}","PAID","","${w.note || ''}"\\n`);
-      downloadFile(csv, `savings_export_${Date.now()}.csv`, 'text/csv');
-    }
+    window.verifySpecificTx = async (id) => {
+      const deposits = await dbQuery('payments', 'readonly', 'getAll');
+      const item = deposits.find(d => d.id === id);
+      if (item && item.status === 'PENDING') {
+        pendingTx = item;
+        document.getElementById('modalTxAmount').textContent = `₹${item.amount}`;
+        document.getElementById('modalTxId').textContent = item.id;
+        document.getElementById('modalUtrInput').value = '';
+        document.getElementById('verifyModal').classList.remove('hidden');
+      }
+    };
 
-    async function backupJSON() {
-      const deposits = await dbOp('deposits', 'readonly', 'getAll');
-      const withdrawals = await dbOp('withdrawals', 'readonly', 'getAll');
-      downloadFile(JSON.stringify({ deposits, withdrawals }, null, 2), `savings_backup.json`, 'application/json');
-    }
+    // 6. Event Wiring
+    document.addEventListener('DOMContentLoaded', async () => {
+      await openDatabase();
+      calculateTodaySuggestion();
+      await refreshDashboard();
+      checkPendingPayment();
 
-    function downloadFile(content, name, type) {
-      const blob = new Blob([content], { type });
-      const a = document.createElement('a');
-      a.href = URL.createObjectURL(blob);
-      a.download = name;
-      a.click();
-    }
+      // Home CTA
+      document.getElementById('heroPayBtn').onclick = () => startPaymentFlow(dailySuggestedAmount);
+
+      // Amount Pills
+      document.querySelectorAll('.pill[data-amt]').forEach(pill => {
+        pill.onclick = (e) => {
+          document.querySelectorAll('.pill').forEach(p => p.classList.remove('active'));
+          e.target.classList.add('active');
+          document.getElementById('customInputWrap').classList.add('hidden');
+          const amt = parseInt(e.target.getAttribute('data-amt'));
+          startPaymentFlow(amt);
+        };
+      });
+
+      // Custom Amount Toggle
+      const customPill = document.getElementById('customAmountPill');
+      customPill.onclick = () => {
+        document.querySelectorAll('.pill').forEach(p => p.classList.remove('active'));
+        customPill.classList.add('active');
+        document.getElementById('customInputWrap').classList.remove('hidden');
+        document.getElementById('customAmountVal').focus();
+      };
+
+      // Custom Pay Button
+      document.getElementById('customPaySubmit').onclick = () => {
+        const val = parseFloat(document.getElementById('customAmountVal').value);
+        if (val && val > 0) startPaymentFlow(val);
+      };
+
+      // Record Withdrawal
+      document.getElementById('withdrawForm').onsubmit = async (e) => {
+        e.preventDefault();
+        const amt = parseFloat(document.getElementById('withdrawAmtInput').value);
+        const note = document.getElementById('withdrawNoteInput').value.trim() || 'Personal withdrawal';
+        if (!amt || amt <= 0) return;
+
+        await dbQuery('withdrawals', 'readwrite', 'add', {
+          id: 'WTH-' + Date.now(),
+          amount: amt,
+          date: new Date().toISOString(),
+          note: note
+        });
+
+        document.getElementById('withdrawForm').reset();
+        await refreshDashboard();
+        switchTab('tab-home');
+      };
+
+      // Verification Modal Actions
+      document.getElementById('modalConfirmBtn').onclick = async () => {
+        if (!pendingTx) return;
+        const utr = document.getElementById('modalUtrInput').value.trim();
+        pendingTx.status = 'PAID';
+        if (utr) pendingTx.reference = utr;
+
+        await dbQuery('payments', 'readwrite', 'put', pendingTx);
+        dismissModal();
+        await refreshDashboard();
+      };
+
+      document.getElementById('modalCancelBtn').onclick = dismissModal;
+
+      // Tab Buttons
+      document.querySelectorAll('.bottom-bar .nav-btn').forEach(btn => {
+        btn.onclick = () => switchTab(btn.getAttribute('data-tab'));
+      });
+      document.getElementById('gotoHistoryLink').onclick = () => switchTab('tab-history');
+
+      // CSV Export
+      document.getElementById('exportCsvBtn').onclick = async () => {
+        const deposits = (await dbQuery('payments', 'readonly', 'getAll')) || [];
+        const withdrawals = (await dbQuery('withdrawals', 'readonly', 'getAll')) || [];
+        let csv = 'Type,ID,Amount,Date,Status,UTR/Ref,Note\\n';
+        
+        deposits.forEach(d => {
+          csv += `Deposit,"${d.id}",${d.amount},"${d.date}","${d.status}","${d.reference || ''}","${d.note || ''}"\\n`;
+        });
+        withdrawals.forEach(w => {
+          csv += `Withdrawal,"${w.id}",${w.amount},"${w.date}","PAID","","${w.note || ''}"\\n`;
+        });
+
+        const blob = new Blob([csv], { type: 'text/csv' });
+        const a = document.createElement('a');
+        a.href = URL.createObjectURL(blob);
+        a.download = `Savings_Ledger_${Date.now()}.csv`;
+        a.click();
+      };
+
+      // Backup JSON
+      document.getElementById('backupJsonBtn').onclick = async () => {
+        const payments = (await dbQuery('payments', 'readonly', 'getAll')) || [];
+        const withdrawals = (await dbQuery('withdrawals', 'readonly', 'getAll')) || [];
+        const dump = JSON.stringify({ payments, withdrawals, exportedAt: new Date().toISOString() }, null, 2);
+        
+        const blob = new Blob([dump], { type: 'application/json' });
+        const a = document.createElement('a');
+        a.href = URL.createObjectURL(blob);
+        a.download = `Savings_Backup_${Date.now()}.json`;
+        a.click();
+      };
+
+      // Reset
+      document.getElementById('clearDataBtn').onclick = async () => {
+        if (confirm('Are you sure you want to delete all saved data? This cannot be undone.')) {
+          await dbQuery('payments', 'readwrite', 'clear');
+          await dbQuery('withdrawals', 'readwrite', 'clear');
+          await refreshDashboard();
+        }
+      };
+
+      // Check on return from UPI app
+      window.addEventListener('focus', checkPendingPayment);
+      document.addEventListener('visibilitychange', () => {
+        if (document.visibilityState === 'visible') checkPendingPayment();
+      });
+    });
   </script>
 </body>
 </html>

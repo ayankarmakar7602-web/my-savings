@@ -1,18 +1,10 @@
 {
-  "name": "My Savings",
-  "short_name": "My Savings",
-  "start_url": "./",
-  "scope": "./",
-  "display": "standalone",
-  "background_color": "#07111f",
-  "theme_color": "#07111f",
-  "description": "Personal savings tracker with UPI deposits and withdrawal history.",
-  "icons": [
-    {
-      "src": "icon.svg",
-      "sizes": "any",
-      "type": "image/svg+xml",
-      "purpose": "any maskable"
-    }
-  ]
+  "name":"My Savings",
+  "short_name":"My Savings",
+  "start_url":"./",
+  "display":"standalone",
+  "background_color":"#07111f",
+  "theme_color":"#07111f",
+  "description":"Personal savings tracker with UPI deposits and notifications.",
+  "icons":[{"src":"icon.svg","sizes":"any","type":"image/svg+xml","purpose":"any maskable"}]
 }
